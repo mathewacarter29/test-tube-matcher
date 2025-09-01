@@ -1,0 +1,13 @@
+.ball {
+  height: 20px;
+  width: 20px;
+  border-radius: 100%;
+  background-color: black;
+  position: absolute;
+  left: calc(50% - 10px);
+}
+
+.tube {
+  position: relative;
+  left: 0%;
+}
