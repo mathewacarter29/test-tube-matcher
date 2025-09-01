@@ -3,12 +3,14 @@ import classes from "./Tube.module.css";
 
 interface FilledTubeProps {
   tube: Tube;
+  onClick: () => void;
+  isSelected: boolean;
 }
 
-const FilledTube = ({ tube }: FilledTubeProps) => {
+const FilledTube = ({ tube, onClick, isSelected }: FilledTubeProps) => {
   return (
     <div className={classes.tube}>
-      <img src={tubeImage} alt="test tube" style={{height: '300px'}}/>
+      <img src={tubeImage} alt="test tube" style={{height: '300px', pointerEvents: 'all'}} onClick={onClick}/>
       {tube.balls.map((ball, index) => {
         return (
           <div
@@ -16,8 +18,9 @@ const FilledTube = ({ tube }: FilledTubeProps) => {
             className={classes.ball}
             style={{
               backgroundColor: ball.backgroundColor,
-              bottom: `${(index) * 20 + 10}%`,
+              bottom: isSelected && tube.balls.length && index === tube.balls.length - 1 ? `${(index) * 20 + 30}%` : `${(index) * 20 + 10}%`,
             }}
+            onClick={onClick}
           ></div>
         );
       })}

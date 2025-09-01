@@ -24,6 +24,7 @@ const Tubes = () => {
   ];
 
   const [tubes, setTubes] = useState<Tube[]>([]);
+  const [selected, setSelected] = useState<number>(-1);
 
   useEffect(() => {
     let newTubes: Tube[] = [];
@@ -44,12 +45,21 @@ const Tubes = () => {
     setTubes(newTubes);
   }, []);
 
+  const selectTube = (index: number) => {
+    setSelected((prevState) => {
+      if (prevState !== -1) {
+        return -1;
+      }
+      return index;
+    });
+  };
+
   return (
     <div className={classes.tubes}>
       {tubes.map((tube, i) => {
         return (
           <div key={i}>
-            <FilledTube tube={tube}/>
+            <FilledTube tube={tube} onClick={() => selectTube(i)} isSelected={selected === i}/>
           </div>
         );
       })}
