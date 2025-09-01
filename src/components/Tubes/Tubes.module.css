@@ -1,6 +1,6 @@
 .tubes {
   display: grid;
-  grid-gap: 10px;
+  grid-gap: 75px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-auto-columns: 1fr;
 }

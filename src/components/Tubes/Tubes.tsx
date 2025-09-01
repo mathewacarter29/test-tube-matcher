@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import Tube, { type Ball } from "./Tube/Tube";
+import FilledTube, { type Ball, type Tube } from "./Tube/Tube";
 import classes from "./Tubes.module.css";
 
 const Tubes = () => {
-  interface Tube {
-    balls: Ball[];
-  }
-
   const NUM_TUBES = 8;
   const BALLS_PER_TUBE = 4;
   const COLORS = [
@@ -34,7 +30,6 @@ const Tubes = () => {
     let allBalls: string[] = COLORS.slice(0, NUM_TUBES).flatMap((color) =>
       Array(BALLS_PER_TUBE).fill(color)
     );
-    console.log(allBalls);
     for (let i = 0; i < NUM_TUBES; i++) {
       // get BALLS_PER_TUBE balls to put in a tube
       const balls: Ball[] = [];
@@ -44,7 +39,6 @@ const Tubes = () => {
         balls.push({ backgroundColor: allBalls[index] });
         allBalls.splice(index, 1);
       }
-      console.log(balls);
       newTubes.push({ balls });
     }
     setTubes(newTubes);
@@ -52,10 +46,10 @@ const Tubes = () => {
 
   return (
     <div className={classes.tubes}>
-      {tubes.map((_, i) => {
+      {tubes.map((tube, i) => {
         return (
           <div key={i}>
-            <Tube/>
+            <FilledTube tube={tube}/>
           </div>
         );
       })}
