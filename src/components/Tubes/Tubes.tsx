@@ -48,20 +48,26 @@ const Tubes = () => {
   const selectTube = (index: number) => {
     setSelected((prevState) => {
       // first tube selected
-      if (!tubes[index].balls) { // first tube has empty balls array
+      if (!tubes[index].balls) {
+        // first tube has empty balls array
         return -1;
       }
-      if (prevState === -1 && tubes[index].balls.length > 0) { // first tube and has a ball to move
+      if (prevState === -1 && tubes[index].balls.length > 0) {
+        // first tube and has a ball to move
         return index;
       }
-      if (tubes[index].balls.length >= 5) { // invalid tube to place ball onto
+      if (tubes[index].balls.length >= 5) {
+        // invalid tube to place ball onto
         return -1;
       }
       // second tube selected
       // pop top ball of previous tube and add it to top of next tube
-      const top = tubes[prevState].balls[tubes[prevState].balls.length - 1];
-      tubes[prevState].balls.splice(tubes[prevState].balls.length - 1, 1);
-      tubes[index].balls.push(top)
+      let newTubes = JSON.parse(JSON.stringify(tubes));
+      const top =
+        newTubes[prevState].balls[newTubes[prevState].balls.length - 1];
+      newTubes[prevState].balls.splice(newTubes[prevState].balls.length - 1, 1);
+      newTubes[index].balls.push(top);
+      setTubes(newTubes);
       return -1;
     });
   };
@@ -71,7 +77,11 @@ const Tubes = () => {
       {tubes.map((tube, i) => {
         return (
           <div key={i}>
-            <FilledTube tube={tube} onClick={() => selectTube(i)} isSelected={selected === i}/>
+            <FilledTube
+              tube={tube}
+              onClick={() => selectTube(i)}
+              isSelected={selected === i}
+            />
           </div>
         );
       })}
