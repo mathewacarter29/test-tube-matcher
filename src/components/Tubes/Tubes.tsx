@@ -34,7 +34,7 @@ const Tubes = () => {
     for (let i = 0; i < NUM_TUBES; i++) {
       // get BALLS_PER_TUBE balls to put in a tube
       const balls: Ball[] = [];
-      for (let j = 0; j < BALLS_PER_TUBE; j++) {
+      for (let j = 0; j < BALLS_PER_TUBE && allBalls; j++) {
         // pick a random color and remove it from the allBalls array
         const index = Math.floor(Math.random() * allBalls.length);
         balls.push({ backgroundColor: allBalls[index] });
@@ -46,13 +46,13 @@ const Tubes = () => {
   }, []);
 
   const selectTube = (index: number) => {
-    setSelected((prevState) => {
+    setSelected((prevIndex) => {
       // first tube selected
       if (!tubes[index].balls) {
         // first tube has empty balls array
         return -1;
       }
-      if (prevState === -1 && tubes[index].balls.length > 0) {
+      if (prevIndex === -1 && tubes[index].balls.length > 0) {
         // first tube and has a ball to move
         return index;
       }
@@ -62,10 +62,11 @@ const Tubes = () => {
       }
       // second tube selected
       // pop top ball of previous tube and add it to top of next tube
+      // TODO: it would be cool if this was done using setState with a callback instead of deep copying the tubes array
       let newTubes = JSON.parse(JSON.stringify(tubes));
       const top =
-        newTubes[prevState].balls[newTubes[prevState].balls.length - 1];
-      newTubes[prevState].balls.splice(newTubes[prevState].balls.length - 1, 1);
+        newTubes[prevIndex].balls[newTubes[prevIndex].balls.length - 1];
+      newTubes[prevIndex].balls.splice(newTubes[prevIndex].balls.length - 1, 1);
       newTubes[index].balls.push(top);
       setTubes(newTubes);
       return -1;
@@ -81,6 +82,7 @@ const Tubes = () => {
               tube={tube}
               onClick={() => selectTube(i)}
               isSelected={selected === i}
+              expectedBallNum={BALLS_PER_TUBE}
             />
           </div>
         );
