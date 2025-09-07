@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import tubeImage from "../../../assets/tube.png";
 import classes from "./Tube.module.css";
 
@@ -6,25 +5,15 @@ interface FilledTubeProps {
   tube: Tube;
   onClick: () => void;
   isSelected: boolean;
-  expectedBallNum: number;
+  isComplete: boolean;
 }
 
 const FilledTube = ({
   tube,
   onClick,
   isSelected,
-  expectedBallNum,
+  isComplete
 }: FilledTubeProps) => {
-  const [isComplete, setIsComplete] = useState<boolean>(false);
-  useEffect(() => {
-    if (tube.balls && tube.balls.length > 0) {
-      const newIsComplete =
-        tube.balls.every(
-          (ball) => ball.backgroundColor === tube.balls[0].backgroundColor
-        ) && tube.balls.length === expectedBallNum;
-      setIsComplete(newIsComplete);
-    }
-  }, [tube]);
 
   const onClickTube = () => {
     onClick();

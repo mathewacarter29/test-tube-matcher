@@ -37,10 +37,12 @@ const Tubes = () => {
     while (lessTubes.size < 4) {
       lessTubes.add(Math.floor(Math.random() * NUM_TUBES));
     }
-    for (let i = 0; i < NUM_TUBES; i++) { // loop for tubes
+    for (let i = 0; i < NUM_TUBES; i++) {
+      // loop for tubes
       // get BALLS_PER_TUBE balls to put in a tube
       const balls: Ball[] = [];
-      for (let j = 0; j < BALLS_PER_TUBE && allBalls; j++) { // going through the balls in a tube
+      for (let j = 0; j < BALLS_PER_TUBE && allBalls; j++) {
+        // going through the balls in a tube
         if (lessTubes.has(i)) {
           j++;
           lessTubes.delete(i);
@@ -74,7 +76,10 @@ const Tubes = () => {
         let newTubes = JSON.parse(JSON.stringify(tubes));
         const top =
           newTubes[prevIndex].balls[newTubes[prevIndex].balls.length - 1];
-        newTubes[prevIndex].balls.splice(newTubes[prevIndex].balls.length - 1, 1);
+        newTubes[prevIndex].balls.splice(
+          newTubes[prevIndex].balls.length - 1,
+          1
+        );
         newTubes[index].balls.push(top);
         setTubes(newTubes);
         return -1;
@@ -84,17 +89,32 @@ const Tubes = () => {
 
   useEffect(() => {
     if (checkForWin()) {
-      
     }
-  }, [tubes])
+  }, [tubes]);
 
   const checkForWin = (): boolean => {
     return tubes.every((tube) => {
       // tube has 4 balls that are all the same color or tube is empty
-      return (tube.balls.length === BALLS_PER_TUBE && tube.balls.every((ball) => ball.backgroundColor === tube.balls[0].backgroundColor)) || tube.balls.length === 0;
-    })
-  }
-  
+      return (
+        (tube.balls.length === BALLS_PER_TUBE &&
+          tube.balls.every(
+            (ball) => ball.backgroundColor === tube.balls[0].backgroundColor
+          )) ||
+        tube.balls.length === 0
+      );
+    });
+  };
+
+  const isTubeComplete = (tube: Tube): boolean => {
+    if (checkForWin()) {
+      return true;
+    }
+    const isTubeFull =
+      tube.balls.every(
+        (ball) => ball.backgroundColor === tube.balls[0].backgroundColor
+      ) && tube.balls.length === BALLS_PER_TUBE;
+    return isTubeFull;
+  };
 
   return (
     <div className={classes.tubes}>
@@ -105,7 +125,7 @@ const Tubes = () => {
               tube={tube}
               onClick={() => selectTube(i)}
               isSelected={selected === i}
-              expectedBallNum={BALLS_PER_TUBE}
+              isComplete={isTubeComplete(tube)}
             />
           </div>
         );
