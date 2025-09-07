@@ -3,9 +3,16 @@ import FilledTube, { type Ball, type Tube } from "./Tube/Tube";
 import classes from "./Tubes.module.css";
 import TimerCounter from "../TimerCounter/TimerCounter";
 import { useStopwatch } from "react-timer-hook";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@mui/material";
 
 const Tubes = () => {
-  const NUM_TUBES = 8;
+  const NUM_TUBES = 4;
   const BALLS_PER_TUBE = 4;
   const COLORS = [
     "red",
@@ -135,11 +142,62 @@ const Tubes = () => {
     setNewTubes();
     setSelected(-1);
     setCount(0);
+    setIsWinner(false);
     reset();
+  };
+
+  /**
+   * Format the time for the winner's dialog box
+   * @param hours number of hours it took to complete puzzle
+   * @param minutes number of minutes it took to complete puzzle
+   * @param seconds number of seconds it took to complete puzzle
+   * @returns a string representation of the time
+   */
+  const timeFormatter = (hours: number, minutes: number, seconds: number) => {
+    const hourText = hours
+      ? `${String(hours)} hour${hours > 1 ? "s" : ""}, `
+      : "";
+    const minuteText =
+      hours || minutes
+        ? `${String(minutes)} minute${minutes > 1 ? "s" : ""}, `
+        : "";
+    const secondsText = `${String(seconds)} seconds`;
+    return `${hourText}${minuteText}${secondsText}`;
   };
 
   return (
     <div>
+      <Dialog
+        open={isWinner}
+        onClose={() => setIsWinner(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        className={classes.timer}
+      >
+        <DialogTitle id="alert-dialog-title">
+          <span>You're a winner!</span>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <span>Turns taken: {count}</span>
+            <br />
+            <span>Time elapsed: </span>
+            <span>{timeFormatter(hours, minutes, seconds)}</span>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <div style={{width: '100%', paddingLeft: '20px', paddingBottom: '20px'}}>
+            <button
+              onClick={() => {
+                onClickRestart();
+              }}
+              autoFocus
+            >
+              Play again
+            </button>
+          </div>
+        </DialogActions>
+      </Dialog>
       <TimerCounter
         time={{
           hours,
