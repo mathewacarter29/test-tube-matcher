@@ -28,17 +28,14 @@ const Tubes = () => {
   const [tubes, setTubes] = useState<Tube[]>([]);
   const [selected, setSelected] = useState<number>(-1);
   const [count, setCount] = useState<number>(0);
-  const { seconds, minutes, hours, reset} = useStopwatch();
+  const [isWinner, setIsWinner] = useState<boolean>(false);
+  const { seconds, minutes, hours, reset, pause, start } = useStopwatch();
 
   // at the very start, get new tube list
   useEffect(() => {
+    start();
     setNewTubes();
   }, []);
-
-  // check for a win whenever the tubes change
-  useEffect(() => {
-    checkForWin();
-  }, [tubes]);
 
   const getNewTubes = (): Tube[] => {
     let newTubes: Tube[] = [];
@@ -84,7 +81,10 @@ const Tubes = () => {
         }
         return index;
       } else {
-        if (tubes[index].balls.length >= BALLS_PER_TUBE) {
+        if (
+          tubes[index].balls.length >= BALLS_PER_TUBE ||
+          prevIndex === index
+        ) {
           // invalid tube to place ball onto
           return -1;
         }
@@ -101,12 +101,16 @@ const Tubes = () => {
         newTubes[index].balls.push(top);
         setTubes(newTubes);
         setCount(count + 1);
+        if (checkForWin(newTubes)) {
+          setIsWinner(true);
+          pause();
+        }
         return -1;
       }
     });
   };
 
-  const checkForWin = (): boolean => {
+  const checkForWin = (tubes: Tube[]): boolean => {
     return tubes.every((tube) => {
       // tube has 4 balls that are all the same color or tube is empty
       return (
@@ -120,9 +124,6 @@ const Tubes = () => {
   };
 
   const isTubeComplete = (tube: Tube): boolean => {
-    if (checkForWin()) {
-      return true;
-    }
     const isTubeFull =
       tube.balls.every(
         (ball) => ball.backgroundColor === tube.balls[0].backgroundColor
@@ -155,7 +156,7 @@ const Tubes = () => {
                 tube={tube}
                 onClick={() => selectTube(i)}
                 isSelected={selected === i}
-                isComplete={isTubeComplete(tube)}
+                isComplete={isTubeComplete(tube) || isWinner}
               />
             </div>
           );
