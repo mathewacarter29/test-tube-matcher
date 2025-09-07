@@ -1,3 +1,9 @@
+# Play this game
+Click here -> [Test Tube Matcher](https://mathewacarter29.github.io/test-tube-matcher/)
+
+## Deployed by Github Pages
+Follow below instructions: [article](https://dev.to/rashidshamloo/deploying-vite-react-app-to-github-pages-35hf)
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
