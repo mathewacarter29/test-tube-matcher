@@ -27,9 +27,7 @@ const FilledTube = ({
   }, [tube]);
 
   const onClickTube = () => {
-    if (!isComplete) {
-      onClick();
-    }
+    onClick();
   };
   return (
     <div
@@ -40,7 +38,7 @@ const FilledTube = ({
         src={tubeImage}
         alt="test tube"
         style={{ height: "300px", pointerEvents: "all" }}
-        onClick={onClickTube}
+        onClick={isComplete ? undefined : onClickTube}
       />
       {tube.balls.map((ball, index) => {
         const bottomPercent =
@@ -55,7 +53,7 @@ const FilledTube = ({
               backgroundColor: ball.backgroundColor,
               bottom: bottomPercent,
             }}
-            onClick={onClickTube}
+            onClick={isComplete ? undefined : onClickTube}
           ></div>
         );
       })}
