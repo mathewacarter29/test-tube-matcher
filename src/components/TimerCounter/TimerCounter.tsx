@@ -20,10 +20,10 @@ const TimerCounter = (props: TimerProps) => {
       style={{ display: "flex", justifyContent: "space-around", color: 'black' }}
     >
       <div>
-        <span>{count} turns taken</span>
+        <span>Turns: {count}</span>
       </div>
       <div>
-        <span>Time elapsed - </span>
+        <span>Time - </span>
         <span>{String(time.hours).padStart(2, "0")}</span>:
         <span>{String(time.minutes).padStart(2, "0")}</span>:
         <span>{String(time.seconds).padStart(2, "0")}</span>

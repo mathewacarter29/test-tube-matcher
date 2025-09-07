@@ -12,9 +12,9 @@ import {
 } from "@mui/material";
 
 const Tubes = () => {
-  const NUM_TUBES = 4;
+  const NUM_TUBES = 8;
   const BALLS_PER_TUBE = 4;
-  const COLORS = [
+  const COLORS = [ // 15 colors
     "red",
     "orange",
     "yellow",

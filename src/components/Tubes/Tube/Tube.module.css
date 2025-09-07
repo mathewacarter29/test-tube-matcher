@@ -1,10 +1,10 @@
 .ball {
-  height: 50px;
-  width: 50px;
+  height: 4vw;
+  width: 4vw;
   border-radius: 100%;
   background-color: black;
   position: absolute;
-  left: calc(50% - 25px);
+  left: calc(50% - 2vw);
 }
 
 .tube {
