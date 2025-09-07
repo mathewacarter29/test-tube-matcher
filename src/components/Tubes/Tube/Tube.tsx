@@ -26,7 +26,7 @@ const FilledTube = ({
       <img
         src={tubeImage}
         alt="test tube"
-        style={{ height: "30vw", pointerEvents: "all" }}
+        style={{ height: "30vw", pointerEvents: "all", maxHeight: '300px' }}
         onClick={isComplete ? undefined : onClickTube}
       />
       {tube.balls.map((ball, index) => {

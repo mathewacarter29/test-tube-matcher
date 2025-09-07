@@ -5,6 +5,8 @@
   background-color: black;
   position: absolute;
   left: calc(50% - 2vw);
+  max-width: 50px;
+  max-height: 50px;
 }
 
 .tube {
