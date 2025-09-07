@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import FilledTube, { type Ball, type Tube } from "./Tube/Tube";
 import classes from "./Tubes.module.css";
+import TimerCounter from "../TimerCounter/TimerCounter";
+import { useStopwatch } from "react-timer-hook";
 
 const Tubes = () => {
   const NUM_TUBES = 8;
@@ -25,8 +27,20 @@ const Tubes = () => {
 
   const [tubes, setTubes] = useState<Tube[]>([]);
   const [selected, setSelected] = useState<number>(-1);
+  const [count, setCount] = useState<number>(0);
+  const { seconds, minutes, hours, reset} = useStopwatch();
 
+  // at the very start, get new tube list
   useEffect(() => {
+    setNewTubes();
+  }, []);
+
+  // check for a win whenever the tubes change
+  useEffect(() => {
+    checkForWin();
+  }, [tubes]);
+
+  const getNewTubes = (): Tube[] => {
     let newTubes: Tube[] = [];
     const numColors: number = NUM_TUBES - 1;
     let allBalls: string[] = COLORS.slice(0, numColors).flatMap((color) =>
@@ -54,8 +68,12 @@ const Tubes = () => {
       }
       newTubes.push({ balls });
     }
-    setTubes(newTubes);
-  }, []);
+    return newTubes;
+  };
+
+  const setNewTubes = () => {
+    setTubes(getNewTubes());
+  };
 
   const selectTube = (index: number) => {
     setSelected((prevIndex) => {
@@ -82,15 +100,11 @@ const Tubes = () => {
         );
         newTubes[index].balls.push(top);
         setTubes(newTubes);
+        setCount(count + 1);
         return -1;
       }
     });
   };
-
-  useEffect(() => {
-    if (checkForWin()) {
-    }
-  }, [tubes]);
 
   const checkForWin = (): boolean => {
     return tubes.every((tube) => {
@@ -116,20 +130,38 @@ const Tubes = () => {
     return isTubeFull;
   };
 
+  const onClickRestart = () => {
+    setNewTubes();
+    setSelected(-1);
+    setCount(0);
+    reset();
+  };
+
   return (
-    <div className={classes.tubes}>
-      {tubes.map((tube, i) => {
-        return (
-          <div key={i}>
-            <FilledTube
-              tube={tube}
-              onClick={() => selectTube(i)}
-              isSelected={selected === i}
-              isComplete={isTubeComplete(tube)}
-            />
-          </div>
-        );
-      })}
+    <div>
+      <TimerCounter
+        time={{
+          hours,
+          minutes,
+          seconds,
+        }}
+        count={count}
+      />
+      <div className={classes.tubes}>
+        {tubes.map((tube, i) => {
+          return (
+            <div key={i}>
+              <FilledTube
+                tube={tube}
+                onClick={() => selectTube(i)}
+                isSelected={selected === i}
+                isComplete={isTubeComplete(tube)}
+              />
+            </div>
+          );
+        })}
+      </div>
+      <button onClick={onClickRestart}>Restart</button>
     </div>
   );
 };
