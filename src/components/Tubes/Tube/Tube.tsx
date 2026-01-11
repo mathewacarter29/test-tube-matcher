@@ -20,7 +20,7 @@ const FilledTube = ({
   const onClickTube = () => {
     onClick();
   };
-  console.log(width);
+
   return (
     <div
       className={classes.tube}
